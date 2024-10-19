@@ -1,8 +1,45 @@
 import React, { useState } from 'react';
+import AddUser from './addUser/AddUser';
+import { useUserStore } from '../../../lib/userStore';
+import { useEffect } from 'react';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../../lib/firebase';
+import { useChatStore } from '../../../lib/chatStore';
 
 const ChatList = () => {
+  const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
 
+  const { currentUser } = useUserStore();
+  const { chatId, changeChat } = useChatStore();
+
+  useEffect(() => {
+    const unSub = onSnapshot(
+      doc(db, 'userchats', currentUser.id),
+      async (res) => {
+        const items = res.data().chats;
+
+        const promises = items.map(async (item) => {
+          const userDocRef = doc(db, 'users', item.receiverId);
+          const userDocSnap = await getDoc(userDocRef);
+
+          const user = userDocSnap.data();
+
+          return { ...item, user };
+        });
+        const chatData = await Promise.all(promises);
+        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+      }
+    );
+
+    return () => {
+      unSub();
+    };
+  }, [currentUser.id]);
+
+  const handleSelect = async (chat) => {
+    changeChat(chat.chatId, chat.user);
+  };
   return (
     <div className='flex-[1] overflow-scroll no-scrollbar'>
       <div className='flex items-center gap-5 p-5'>
@@ -25,39 +62,25 @@ const ChatList = () => {
           onClick={() => setAddMode((prev) => !prev)}
         />
       </div>
-      <div className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-600'>
-        <img
-          className='w-12 h-12 rounded-full object-cover'
-          src='../images/avatar.png'
-          alt=''
-        />
-        <div className='text flex flex-col gap-2'>
-          <span className='font-medium'>Jance Doe</span>
-          <p className='text-sm font-light'>Hello</p>
+      {chats.map((chat) => (
+        <div
+          className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-600'
+          key={chat.chatId}
+          onClick={() => handleSelect(chat)}
+        >
+          <img
+            className='w-12 h-12 rounded-full object-cover'
+            src={chat.user.avatar || '../images/avatar.png'}
+            alt=''
+          />
+          <div className='text flex flex-col gap-2'>
+            <span className='font-medium'>{chat.user.username}</span>
+            <p className='text-sm font-light'>{chat.lastMessage}</p>
+          </div>
         </div>
-      </div>
-      <div className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-700'>
-        <img
-          className='w-12 h-12 rounded-full object-cover'
-          src='../images/avatar.png'
-          alt=''
-        />
-        <div className='text flex flex-col gap-2'>
-          <span className='font-medium'>Jance Doe</span>
-          <p className='text-sm font-light'>Hello</p>
-        </div>
-      </div>
-      <div className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-700'>
-        <img
-          className='w-12 h-12 rounded-full object-cover'
-          src='../images/avatar.png'
-          alt=''
-        />
-        <div className='text flex flex-col gap-2'>
-          <span className='font-medium'>Jance Doe</span>
-          <p className='text-sm font-light'>Hello</p>
-        </div>
-      </div>
+      ))}
+
+      {addMode && <AddUser />}
     </div>
   );
 };

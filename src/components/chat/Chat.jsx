@@ -1,14 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
+import { useChatStore } from '../../lib/chatStore';
 
 const Chat = () => {
+  const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
+
+  const { chatId } = useChatStore();
 
   const endRef = useRef(null);
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
+
+  useEffect(() => {
+    const onSub = onSnapshot(doc(db, 'chats', chatId), (res) => {
+      setChat(res.data());
+    });
+
+    return () => {
+      onSub();
+    };
+  }, [chatId]);
 
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji);
@@ -50,61 +66,18 @@ const Chat = () => {
         </div>
       </div>
       <div className='center p-5 flex-1 overflow-scroll no-scrollbar flex flex-col gap-5 [&>.message]:max-w-[80%]'>
-        <div className='message'>
-          <img src='../images/avatar.png' alt='' />
-          <div className='msgContainer'>
-            <div className='texts'>
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel at
-                quasi aspernatur commodi. Numquam quasi laboriosam fugiat magni
-                odio, vitae reiciendis temporibus perspiciatis reprehenderit
-                repellendus atque ea, id sint fuga.
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-        </div>
-        <div className='message own'>
-          <div className='msgContainer'>
-            <div className='texts'>
-              <img
-                src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                alt=''
-              />
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel at
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-        </div>
-        <div className='message'>
-          <img src='../images/avatar.png' alt='' />
-          <div className='msgContainer'>
-            <div className='texts'>
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel at
-                quasi aspernatur commodi. Numquam quasi laboriosam fugiat magni
-                odio, vitae reiciendis temporibus perspiciatis reprehenderit
-                repellendus atque ea, id sint fuga.
-              </p>
-            </div>
-            <span>1 min ago</span>
-          </div>
-        </div>
-        <div className='message own'>
-          <div>
+        {chat?.messages?.map((message) => (
+          <div className='message own' key={message?.createAt}>
             <div className='msgContainer'>
               <div className='texts'>
-                <p>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel
-                  at
-                </p>
+                {message.img && <img src={message.img} alt='' />}
+                <p>{message.text}</p>
               </div>
-              <span>1 min ago</span>
+              {/* <span>{message.createdAt}</span> */}
             </div>
           </div>
-        </div>
+        ))}
+
         <div ref={endRef}></div>
       </div>
       <div

@@ -94,6 +94,12 @@ body {
 /*Login Form*/
 
 .login {
+  button {
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #1f8ff167;
+    }
+  }
   .item {
     @apply flex-1 flex flex-col items-center gap-5;
     form {
