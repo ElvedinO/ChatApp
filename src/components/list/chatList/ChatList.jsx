@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AddUser from './addUser/AddUser';
 import { useUserStore } from '../../../lib/userStore';
 import { useEffect } from 'react';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import { useChatStore } from '../../../lib/chatStore';
 
@@ -38,7 +38,27 @@ const ChatList = () => {
   }, [currentUser.id]);
 
   const handleSelect = async (chat) => {
-    changeChat(chat.chatId, chat.user);
+    const userChats = chats.map((item) => {
+      const { user, ...rest } = item;
+      return rest;
+    });
+
+    const chatIndex = userChats.findIndex(
+      (item) => item.chatId === chat.chatId
+    );
+
+    userChats[chatIndex].isSeen = true;
+
+    const userChatsRef = doc(db, 'userchats', currentUser.id);
+
+    try {
+      await updateDoc(userChatsRef, {
+        chats: userChats,
+      });
+      changeChat(chat.chatId, chat.user);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div className='flex-[1] overflow-scroll no-scrollbar'>
@@ -67,6 +87,7 @@ const ChatList = () => {
           className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-600'
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
+          style={{ backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe' }}
         >
           <img
             className='w-12 h-12 rounded-full object-cover'

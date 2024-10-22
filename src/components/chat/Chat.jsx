@@ -1,15 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useChatStore } from '../../lib/chatStore';
+import { useUserStore } from '../../lib/userStore';
 
 const Chat = () => {
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
 
-  const { chatId } = useChatStore();
+  const { chatId, user } = useChatStore();
+  const { currentUser } = useUserStore();
 
   const endRef = useRef(null);
   useEffect(() => {
@@ -31,6 +39,59 @@ const Chat = () => {
     setOpen(false);
   };
 
+  const handleSend = async () => {
+    if (text === '') return;
+
+    let imgUrl = null;
+
+    try {
+      // if (img.file) {
+      //   imgUrl = await upload(img.file);
+      // }
+
+      await updateDoc(doc(db, 'chats', chatId), {
+        messages: arrayUnion({
+          senderId: currentUser.id,
+          text,
+          createdAt: new Date(),
+          ...(imgUrl && { img: imgUrl }),
+        }),
+      });
+
+      const userIDs = [currentUser.id, user.id];
+
+      userIDs.forEach(async (id) => {
+        const userChatsRef = doc(db, 'userchats', id);
+        const userChatsSnapshot = await getDoc(userChatsRef);
+
+        if (userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data();
+
+          const chatIndex = userChatsData.chats.findIndex(
+            (c) => c.chatId === chatId
+          );
+
+          userChatsData.chats[chatIndex].lastMessage = text;
+          userChatsData.chats[chatIndex].isSeen =
+            id === currentUser.id ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats,
+          });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // setImg({
+      //   file: null,
+      //   url: '',
+      // });
+
+      setText('');
+    }
+  };
   return (
     <div className='flex flex-col flex-[2] border-l border-r border-gray-600 h-full'>
       <div className='top p-5 flex items-center justify-between border-b border-gray-600'>
@@ -119,7 +180,10 @@ const Chat = () => {
             <EmojiPicker open={open} onEmojiClick={handleEmoji} />
           </div>
         </div>
-        <button className='bg-blue-500 text-white px-5 py-2 rounded-md'>
+        <button
+          className='bg-blue-500 text-white px-5 py-2 rounded-md'
+          onClick={handleSend}
+        >
           Send
         </button>
       </div>
