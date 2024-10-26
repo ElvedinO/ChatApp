@@ -10,11 +10,13 @@ import {
 import { db } from '../../lib/firebase';
 import { useChatStore } from '../../lib/chatStore';
 import { useUserStore } from '../../lib/userStore';
+import upload from '../../lib/upload';
 
 const Chat = () => {
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
+  const [img, setImg] = useState({ file: null, url: '' });
 
   const { chatId, user } = useChatStore();
   const { currentUser } = useUserStore();
@@ -39,15 +41,24 @@ const Chat = () => {
     setOpen(false);
   };
 
+  const handleImg = (e) => {
+    if (e.target.files[0]) {
+      setImg({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0]),
+      });
+    }
+  };
+
   const handleSend = async () => {
     if (text === '') return;
 
     let imgUrl = null;
 
     try {
-      // if (img.file) {
-      //   imgUrl = await upload(img.file);
-      // }
+      if (img.file) {
+        imgUrl = await upload(img.file);
+      }
 
       await updateDoc(doc(db, 'chats', chatId), {
         messages: arrayUnion({
@@ -84,10 +95,10 @@ const Chat = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      // setImg({
-      //   file: null,
-      //   url: '',
-      // });
+      setImg({
+        file: null,
+        url: '',
+      });
 
       setText('');
     }
@@ -128,7 +139,12 @@ const Chat = () => {
       </div>
       <div className='center p-5 flex-1 overflow-scroll no-scrollbar flex flex-col gap-5 [&>.message]:max-w-[80%]'>
         {chat?.messages?.map((message) => (
-          <div className='message own' key={message?.createAt}>
+          <div
+            className={
+              message.senderId === currentUser?.id ? 'message own' : 'message'
+            }
+            key={message?.createAt}
+          >
             <div className='msgContainer'>
               <div className='texts'>
                 {message.img && <img src={message.img} alt='' />}
@@ -138,7 +154,13 @@ const Chat = () => {
             </div>
           </div>
         ))}
-
+        {img.url && (
+          <div className='message own'>
+            <div className='texts'>
+              <img src={img.url} alt='' />
+            </div>
+          </div>
+        )}
         <div ref={endRef}></div>
       </div>
       <div
@@ -146,10 +168,18 @@ const Chat = () => {
        border-t border-gray-600 mt-auto'
       >
         <div className='icons flex gap-5'>
-          <img
-            className='w-5 h-5 cursor-pointer'
-            src='../images/img.png'
-            alt=''
+          <label htmlFor='file'>
+            <img
+              className='w-5 h-5 cursor-pointer'
+              src='../images/img.png'
+              alt=''
+            />
+          </label>
+          <input
+            type='file'
+            id='file'
+            style={{ display: 'none' }}
+            onChange={handleImg}
           />
           <img
             className='w-5 h-5 cursor-pointer'
