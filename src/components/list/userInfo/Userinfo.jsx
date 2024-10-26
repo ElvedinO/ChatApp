@@ -12,7 +12,7 @@ const Userinfo = () => {
           src={currentUser.avatar || '../images/avatar.png'}
           alt=''
         />
-        <h2>John Doe</h2>
+        <h2>{currentUser?.username}</h2>
       </div>
       <div className='flex gap-5'>
         <img className='w-5 cursor-pointer' src='../images/more.png' alt='' />

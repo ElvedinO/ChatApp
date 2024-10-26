@@ -18,7 +18,8 @@ const Chat = () => {
   const [text, setText] = useState('');
   const [img, setImg] = useState({ file: null, url: '' });
 
-  const { chatId, user } = useChatStore();
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
+    useChatStore();
   const { currentUser } = useUserStore();
 
   const endRef = useRef(null);
@@ -109,11 +110,11 @@ const Chat = () => {
         <div className='user flex items-center gap-5 '>
           <img
             className='w-14 h-14 rounded-full object-cover'
-            src='../images/avatar.png'
+            src={user?.avatar || '../images/avatar.png'}
             alt=''
           />
           <div className='textsflex-col gap-1 '>
-            <span className='text-lg font-medium'>Jane Doe</span>
+            <span className='text-lg font-medium'>{user?.username}</span>
             <p className='text-sm font-normal text-gray-400'>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam
             </p>
@@ -193,11 +194,16 @@ const Chat = () => {
           />
         </div>
         <input
-          className='flex-1 bg-midnight/50 p-5 rounded-xl text-white outline-none'
+          className='flex-1 bg-midnight/50 p-5 rounded-xl text-white outline-none disabled:cursor-not-allowed'
           type='text'
-          placeholder='Type a message...'
+          placeholder={
+            isCurrentUserBlocked || isReceiverBlocked
+              ? "You can't send a message"
+              : 'Type a message...'
+          }
           onChange={(e) => setText(e.target.value)}
           value={text}
+          disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
         <div className='emoji relative'>
           <img
@@ -211,8 +217,9 @@ const Chat = () => {
           </div>
         </div>
         <button
-          className='bg-blue-500 text-white px-5 py-2 rounded-md'
+          className='bg-blue-500 text-white px-5 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed'
           onClick={handleSend}
+          disabled={isCurrentUserBlocked || isReceiverBlocked}
         >
           Send
         </button>

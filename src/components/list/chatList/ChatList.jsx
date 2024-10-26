@@ -9,6 +9,7 @@ import { useChatStore } from '../../../lib/chatStore';
 const ChatList = () => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
+  const [input, setInput] = useState('');
 
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
@@ -60,6 +61,11 @@ const ChatList = () => {
       console.log(err);
     }
   };
+
+  const filteredChats = chats.filter((c) =>
+    c.user.username.toLowerCase().includes(input.toLowerCase())
+  );
+
   return (
     <div className='flex-[1] overflow-scroll no-scrollbar'>
       <div className='flex items-center gap-5 p-5'>
@@ -73,6 +79,9 @@ const ChatList = () => {
             className='bg-transparent border-none outline-none text-white flex-1 p-2'
             type='text'
             placeholder='Search'
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
           />
         </div>
         <img
@@ -82,7 +91,7 @@ const ChatList = () => {
           onClick={() => setAddMode((prev) => !prev)}
         />
       </div>
-      {chats.map((chat) => (
+      {filteredChats.map((chat) => (
         <div
           className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-600'
           key={chat.chatId}
@@ -91,11 +100,19 @@ const ChatList = () => {
         >
           <img
             className='w-12 h-12 rounded-full object-cover'
-            src={chat.user.avatar || '../images/avatar.png'}
+            src={
+              chat.user.blocked.includes(currentUser.id)
+                ? '../images/avatar.png'
+                : chat.user.avatar || '../images/avatar.png'
+            }
             alt=''
           />
           <div className='text flex flex-col gap-2'>
-            <span className='font-medium'>{chat.user.username}</span>
+            <span className='font-medium'>
+              {chat.user.blocked.includes(currentUser.id)
+                ? 'User'
+                : chat.user.username}
+            </span>
             <p className='text-sm font-light'>{chat.lastMessage}</p>
           </div>
         </div>
