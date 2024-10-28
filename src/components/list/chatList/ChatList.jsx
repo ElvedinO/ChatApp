@@ -68,17 +68,17 @@ const ChatList = () => {
 
   return (
     <div className='flex-[1] overflow-scroll no-scrollbar'>
-      <div className='flex items-center gap-5 p-5'>
-        <div className='flex flex-row flex-[1] rounded-lg bg-midnight/50'>
+      <div className='flex items-center gap-5 p-5 '>
+        <div className='flex flex-row flex-[1] rounded-2xl bg-darkgray p-1'>
           <img
             className='w-5 h-5 ml-2 self-center '
             src='../images/search.png'
             alt=''
           />
           <input
-            className='bg-transparent border-none outline-none text-white flex-1 p-2'
+            className='bg-transparent outline-none text-white flex-1 p-2 placeholder-lightgray'
             type='text'
-            placeholder='Search'
+            placeholder='Search or start new chat...'
             onChange={(e) => {
               setInput(e.target.value);
             }}
@@ -91,9 +91,10 @@ const ChatList = () => {
           onClick={() => setAddMode((prev) => !prev)}
         />
       </div>
+      <h1 className='px-5 text-2xl font-bold'>Messages</h1>
       {filteredChats.map((chat) => (
         <div
-          className='item flex items-center gap-5 p-5 cursor-pointer border-b border-gray-600'
+          className='item flex items-center gap-5 p-5 cursor-pointer border-b border-bordergray'
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
           style={{ backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe' }}
@@ -113,7 +114,9 @@ const ChatList = () => {
                 ? 'User'
                 : chat.user.username}
             </span>
-            <p className='text-sm font-light'>{chat.lastMessage}</p>
+            <p className='text-sm text-lightgray font-light'>
+              {chat.lastMessage}
+            </p>
           </div>
         </div>
       ))}

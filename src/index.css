@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 :root {
   --light-black: rgba(17, 25, 40, 0.3);
   --medium-black: rgba(17, 25, 40, 0.6);
@@ -23,12 +25,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 body {
-  background-image: url('/public/images/bg.jpg');
+  background-color: #edeff1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,7 +45,7 @@ body {
       @apply self-end;
       .texts {
         p {
-          @apply bg-blue-400;
+          @apply bg-[#48A6C3] text-[#0A0E0F] rounded-tr-none rounded-tl-2xl;
         }
       }
     }
@@ -57,7 +58,7 @@ body {
         @apply w-full h-80 rounded-lg object-cover;
       }
       p {
-        @apply p-5 bg-[var(--light-black)] rounded-lg;
+        @apply px-5 py-2 bg-[#252B2E] rounded-2xl rounded-tl-none text-gray-400;
       }
     }
     span {

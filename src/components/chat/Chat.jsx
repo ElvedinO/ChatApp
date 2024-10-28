@@ -105,20 +105,16 @@ const Chat = () => {
     }
   };
   return (
-    <div className='flex flex-col flex-[2] border-l border-r border-gray-600 h-full'>
-      <div className='top p-5 flex items-center justify-between border-b border-gray-600'>
+    <div className='flex flex-col flex-[2] border-l border-r border-bordergray h-full'>
+      <div className='top p-5 flex items-center justify-between border-b border-bordergray'>
         <div className='user flex items-center gap-5 '>
           <img
-            className='w-14 h-14 rounded-full object-cover'
+            className='w-12 h-12 rounded-full object-cover'
             src={user?.avatar || '../images/avatar.png'}
             alt=''
           />
-          <div className='textsflex-col gap-1 '>
-            <span className='text-lg font-medium'>{user?.username}</span>
-            <p className='text-sm font-normal text-gray-400'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam
-            </p>
-          </div>
+
+          <span className='text-xl font-bold'>{user?.username}</span>
         </div>
         <div className='icons flex gap-5'>
           <img
@@ -138,7 +134,7 @@ const Chat = () => {
           />
         </div>
       </div>
-      <div className='center p-5 flex-1 overflow-scroll no-scrollbar flex flex-col gap-5 [&>.message]:max-w-[80%]'>
+      <div className='center bg-[#0A0E0F] p-5 flex-1 overflow-scroll no-scrollbar flex flex-col gap-5 [&>.message]:max-w-[80%]'>
         {chat?.messages?.map((message) => (
           <div
             className={
@@ -166,13 +162,13 @@ const Chat = () => {
       </div>
       <div
         className='bottom p-5 flex items-center justify-between gap-5
-       border-t border-gray-600 mt-auto'
+       border-t border-bordergray mt-auto'
       >
         <div className='icons flex gap-5'>
           <label htmlFor='file'>
             <img
               className='w-5 h-5 cursor-pointer'
-              src='../images/img.png'
+              src='../images/camera.png'
               alt=''
             />
           </label>
@@ -182,19 +178,9 @@ const Chat = () => {
             style={{ display: 'none' }}
             onChange={handleImg}
           />
-          <img
-            className='w-5 h-5 cursor-pointer'
-            src='../images/camera.png'
-            alt=''
-          />
-          <img
-            className='w-5 h-5 cursor-pointer'
-            src='../images/mic.png'
-            alt=''
-          />
         </div>
         <input
-          className='flex-1 bg-midnight/50 p-5 rounded-xl text-white outline-none disabled:cursor-not-allowed'
+          className='flex-1 bg-darkgray p-4 rounded-xl text-white outline-none disabled:cursor-not-allowed placeholder-lightgray'
           type='text'
           placeholder={
             isCurrentUserBlocked || isReceiverBlocked
@@ -217,7 +203,7 @@ const Chat = () => {
           </div>
         </div>
         <button
-          className='bg-blue-500 text-white px-5 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed'
+          className='bg-[#48A6C3] text-white px-5 py-2 rounded-2xl disabled:bg-red-600 disabled:cursor-not-allowed'
           onClick={handleSend}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         >
