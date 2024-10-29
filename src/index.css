@@ -78,9 +78,8 @@ body {
   .photoItem {
     @apply flex items-center justify-between;
     .photoDetail {
-      @apply flex items-center gap-5;
       img {
-        @apply w-10 h-10 rounded object-cover;
+        @apply rounded-2xl object-cover;
       }
       span {
         @apply text-sm text-gray-500 font-light;

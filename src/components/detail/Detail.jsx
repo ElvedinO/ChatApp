@@ -45,12 +45,12 @@ const Detail = () => {
         <h2>{user?.username}</h2>
       </div>
       <div className='info p-5 flex flex-col gap-6  '>
-        <div className='option'>
+        <div className='option '>
           <div className='title'>
             <span>Media</span>
             <img className='arrowIcons' src='../images/arrowDown.png' alt='' />
           </div>
-          <div className='photos flex flex-col gap-5 mt-5'>
+          <div className='photos grid grid-cols-2 gap-5 mt-5'>
             <div className='photoItem'>
               <div className='photoDetail'>
                 <img
@@ -85,14 +85,10 @@ const Detail = () => {
             </div>
           </div>
         </div>
-        <div className='option'>
-          <div className='title'>
-            <span>Shared Files</span>
-            <img className='arrowIcons' src='../images/arrowUp.png' alt='' />
-          </div>
-        </div>
+      </div>
+      <div className='flex flex-col p-5 gap-5 border-t border-bordergray'>
         <button
-          className='py-3 px-5 bg-red-500 rounded cursor-pointer hover:bg-red-700 transition-all duration-300'
+          className='py-3 px-5 bg-red-500 rounded-2xl cursor-pointer hover:bg-red-700 transition-all duration-300'
           onClick={handleBlock}
         >
           {isCurrentUserBlocked
@@ -102,7 +98,7 @@ const Detail = () => {
             : 'Block User'}
         </button>
         <button
-          className='p-2 bg-blue-400 rounded cursor-pointer hover:bg-blue-700 transition-all duration-300'
+          className='p-2 bg-[#48A6C3] rounded-2xl cursor-pointer hover:bg-blue-700 transition-all duration-300'
           onClick={handleLogout}
         >
           Log Out
