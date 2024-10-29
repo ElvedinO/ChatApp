@@ -67,42 +67,46 @@ const Detail = () => {
               }}
             />
           </div>
-          {isMediaVisible && (
-            <div className='photos grid grid-cols-2 gap-5 mt-5'>
-              <div className='photoItem'>
-                <div className='photoDetail'>
-                  <img
-                    src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                    alt=''
-                  />
-                </div>
-              </div>
-              <div className='photoItem'>
-                <div className='photoDetail'>
-                  <img
-                    src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                    alt=''
-                  />
-                </div>
-              </div>
-              <div className='photoItem'>
-                <div className='photoDetail'>
-                  <img
-                    src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                    alt=''
-                  />
-                </div>
-              </div>
-              <div className='photoItem'>
-                <div className='photoDetail'>
-                  <img
-                    src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                    alt=''
-                  />
-                </div>
+          <div
+            className='photos grid grid-cols-2 gap-5 mt-5 overflow-hidden transition-max-height duration-300'
+            style={{
+              maxHeight: isMediaVisible ? '500px' : '0',
+              transition: 'max-height 0.3s ease-in-out',
+            }}
+          >
+            <div className='photoItem'>
+              <div className='photoDetail'>
+                <img
+                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                  alt=''
+                />
               </div>
             </div>
-          )}
+            <div className='photoItem'>
+              <div className='photoDetail'>
+                <img
+                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                  alt=''
+                />
+              </div>
+            </div>
+            <div className='photoItem'>
+              <div className='photoDetail'>
+                <img
+                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                  alt=''
+                />
+              </div>
+            </div>
+            <div className='photoItem'>
+              <div className='photoDetail'>
+                <img
+                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                  alt=''
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className='flex flex-col p-5 gap-5 border-t border-bordergray'>
@@ -117,7 +121,7 @@ const Detail = () => {
             : 'Block User'}
         </button>
         <button
-          className='p-2 bg-[#48A6C3] rounded-2xl cursor-pointer hover:bg-blue-700 transition-all duration-300'
+          className='p-2 bg-[#48A6C3] rounded-2xl cursor-pointer hover:bg-[#32778b] transition-all duration-300'
           onClick={handleLogout}
         >
           Log Out

@@ -74,15 +74,17 @@ const AddUser = () => {
   };
 
   return (
-    <div className='addUser p-8 bg-midnight/90 rounded-lg absolute top-0 bottom-0 left-0 right-0 m-auto w-max h-max'>
-      <form action='' className='flex gap-5 ' onSubmit={handleSearch}>
+    <div className='addUser p-3 bg-midnight rounded-2xl absolute top-0 bottom-0 left-0 right-0 m-auto w-max h-max'>
+      <form action='' className='flex ' onSubmit={handleSearch}>
         <input
-          className='p-5 rounded-lg outline-none text-black'
+          className='bg-darkgray p-3 rounded-2xl rounded-tr-none rounded-br-none outline-none placeholder-lightgray'
           type='text'
-          placeholder='Username'
+          placeholder='Add a friend...'
           name='username'
         />
-        <button className='p-5 rounded-lg bg-blue-500'>Search</button>
+        <button className=' px-3 rounded-2xl rounded-tl-none rounded-bl-none  bg-[#48A6C3]'>
+          Search
+        </button>
       </form>
       {user && (
         <div className='user mt-12 flex items-center justify-between'>
@@ -94,7 +96,10 @@ const AddUser = () => {
             />
             <span>{user.username}</span>
           </div>
-          <button className='p-2 rounded-lg bg-blue-500' onClick={handleAdd}>
+          <button
+            className=' px-3 rounded-2xl bg-[#48A6C3]'
+            onClick={handleAdd}
+          >
             Add user
           </button>
         </div>

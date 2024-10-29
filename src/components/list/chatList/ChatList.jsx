@@ -69,7 +69,7 @@ const ChatList = () => {
   return (
     <div className='flex-[1] overflow-scroll no-scrollbar'>
       <div className='flex items-center gap-5 p-5 '>
-        <div className='flex flex-row flex-[1] rounded-2xl bg-darkgray p-1'>
+        <div className='flex flex-row flex-[1] rounded-2xl bg-darkgray p-1 relative'>
           <img
             className='w-5 h-5 ml-2 self-center '
             src='../images/search.png'
@@ -83,6 +83,7 @@ const ChatList = () => {
               setInput(e.target.value);
             }}
           />
+          {addMode && <AddUser />}
         </div>
         <img
           className='w-9 h-9 bg-midnight/50 p-2 rounded-xl cursor-pointer'
@@ -120,8 +121,6 @@ const ChatList = () => {
           </div>
         </div>
       ))}
-
-      {addMode && <AddUser />}
     </div>
   );
 };
