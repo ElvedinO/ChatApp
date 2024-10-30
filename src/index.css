@@ -97,7 +97,7 @@ body {
   button {
     &:disabled {
       cursor: not-allowed;
-      background-color: #1f8ff167;
+      background-color: #3a8399;
     }
   }
   .item {
@@ -105,7 +105,7 @@ body {
     form {
       @apply flex flex-col items-center justify-center gap-5;
       input {
-        @apply p-5 bg-[var(--medium-black)] rounded-md;
+        @apply bg-darkgray p-3 rounded-2xl outline-none placeholder-lightgray;
       }
     }
   }

@@ -74,23 +74,33 @@ const Login = () => {
   };
 
   return (
-    <div className='login w-full h-full flex items-center gap-24 '>
-      <div className='item'>
-        <h2>Welcome</h2>
+    <div className='login w-full h-full flex items-center gap-24 justify-center '>
+      <div className='item border-l border-r border-lightgray rounded-2xl p-12  max-w-fit'>
+        <h2 className='text-xl font-bold'>Welcome</h2>
         <form onSubmit={handleLogin}>
-          <input type='text' placeholder='Email' name='email' />
-          <input type='password' placeholder='Password' name='password' />
+          <input
+            className=' placeholder-lightgray outline-none'
+            type='text'
+            placeholder='Email'
+            name='email'
+          />
+          <input
+            className=' outline-none placeholder-lightgray'
+            type='password'
+            placeholder='Password'
+            name='password'
+          />
           <button
             disabled={loading}
-            className='w-full p-5 bg-blue-500 rounded-md font-medium'
+            className='max-w-fit px-5 py-2 bg-blueish  rounded-2xl font-bold'
           >
-            {loading ? 'Loading' : ' Log In'}
+            {loading ? 'Loading...' : 'Sign In'}
           </button>
         </form>
       </div>
-      <div className='seperator h-4/5 w-[2px] bg-gray-600'></div>
-      <div className='item'>
-        <h2>Create an Account</h2>
+      <div className='seperator h-4/5 w-[2px] bg-bordergray'></div>
+      <div className='item p-12 max-w-fit border-l border-r border-lightgray rounded-2xl'>
+        <h2 className='text-xl font-bold'>Create an Account</h2>
         <form onSubmit={handleRegister} action=''>
           <label
             className='flex items-center gap-5 cursor-pointer underline'
@@ -110,14 +120,29 @@ const Login = () => {
             style={{ display: 'none' }}
             onChange={handleAvatar}
           />
-          <input type='text' placeholder='Username' name='username' />
-          <input type='text' placeholder='Email' name='email' />
-          <input type='password' placeholder='Password' name='password' />
+          <input
+            className='outline-none placeholder-lightgray'
+            type='text'
+            placeholder='Username'
+            name='username'
+          />
+          <input
+            className='outline-none placeholder-lightgray'
+            type='text'
+            placeholder='Email'
+            name='email'
+          />
+          <input
+            className='outline-none placeholder-lightgray'
+            type='password'
+            placeholder='Password'
+            name='password'
+          />
           <button
             disabled={loading}
-            className=' w-full p-5 bg-blue-500 rounded-md font-medium'
+            className=' max-w-fit px-5 py-2 bg-blueish  rounded-2xl font-bold'
           >
-            {loading ? 'Loading' : ' Register'}
+            {loading ? 'Loading...' : 'Sign Up'}
           </button>
         </form>
       </div>
