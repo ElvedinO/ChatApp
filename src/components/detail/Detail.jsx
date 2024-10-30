@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, db } from '../../lib/firebase';
 import { useChatStore } from '../../lib/chatStore';
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  updateDoc,
+  onSnapshot,
+} from 'firebase/firestore';
 import { useUserStore } from '../../lib/userStore';
 
 const Detail = () => {
@@ -17,6 +23,23 @@ const Detail = () => {
 
   const [isMediaVisible, setIsMediaVisible] = useState(true);
   const [isArrowRotated, setIsArrowRotated] = useState(false);
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    if (!chatId) return;
+
+    const unsubscribe = onSnapshot(doc(db, 'chats', chatId), (doc) => {
+      const chatData = doc.data();
+      if (chatData && chatData.messages) {
+        const images = chatData.messages
+          .filter((message) => message.img)
+          .map((message) => message.img);
+        setImageUrls(images);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [chatId]);
 
   const handleBlock = async () => {
     if (!user) return;
@@ -43,6 +66,15 @@ const Detail = () => {
     setIsArrowRotated(!isArrowRotated);
   };
 
+  const downloadImage = (url) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank'; // Open in a new tab
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className='flex-[1] overflow-scroll no-scrollbar'>
       <div className='user py-7 px-5 flex flex-col items-center gap-4 border-b border-bordergray text-center'>
@@ -56,7 +88,7 @@ const Detail = () => {
       <div className='info p-5 flex flex-col gap-6'>
         <div className='option'>
           <div className='title' onClick={toggleMediaVisibility}>
-            <span>Media</span>
+            <span className='cursor-pointer'>Media</span>
             <img
               className={`arrowIcons ${isArrowRotated ? 'rotate-180' : ''}`}
               src='../images/arrowDown.png'
@@ -74,38 +106,27 @@ const Detail = () => {
               transition: 'max-height 0.3s ease-in-out',
             }}
           >
-            <div className='photoItem'>
-              <div className='photoDetail'>
-                <img
-                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                  alt=''
-                />
+            {imageUrls.map((url, index) => (
+              <div className='photoItem' key={index}>
+                <div className='photoDetail relative'>
+                  <img
+                    className='w-40 h-40 object-cover'
+                    src={url}
+                    alt={`Chat ${index}`}
+                  />
+                  <div
+                    className='imageDownload absolute top-2 right-2 bg-[#48A6C3] rounded-full cursor-pointer'
+                    onClick={() => downloadImage(url)}
+                  >
+                    <img
+                      className='w-6 h-6 p-1'
+                      src='../images/download.png'
+                      alt=''
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className='photoItem'>
-              <div className='photoDetail'>
-                <img
-                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                  alt=''
-                />
-              </div>
-            </div>
-            <div className='photoItem'>
-              <div className='photoDetail'>
-                <img
-                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                  alt=''
-                />
-              </div>
-            </div>
-            <div className='photoItem'>
-              <div className='photoDetail'>
-                <img
-                  src='https://images.pexels.com/photos/28927948/pexels-photo-28927948/free-photo-of-dramatic-canyon-landscape-on-remote-island.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                  alt=''
-                />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

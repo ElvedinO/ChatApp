@@ -75,7 +75,7 @@ const AddUser = () => {
 
   return (
     <div className='addUser p-3 bg-midnight rounded-2xl absolute top-0 bottom-0 left-0 right-0 m-auto w-max h-max'>
-      <form action='' className='flex ' onSubmit={handleSearch}>
+      <form action='' className='flex' onSubmit={handleSearch}>
         <input
           className='bg-darkgray p-3 rounded-2xl rounded-tr-none rounded-br-none outline-none placeholder-lightgray'
           type='text'
