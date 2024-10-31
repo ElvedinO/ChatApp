@@ -100,7 +100,8 @@ const Detail = () => {
             />
           </div>
           <div
-            className='photos grid grid-cols-2 gap-5 mt-5 overflow-hidden transition-max-height duration-300'
+            className='photos grid grid-cols-2 gap-5 mt-5 overflow-hidden transition-max-height duration-300  overflow-scroll
+        no-scrollbar'
             style={{
               maxHeight: isMediaVisible ? '500px' : '0',
               transition: 'max-height 0.3s ease-in-out',

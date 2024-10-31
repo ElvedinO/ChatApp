@@ -23,9 +23,10 @@ const Chat = () => {
   const { currentUser } = useUserStore();
 
   const endRef = useRef(null);
+
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+  }, [chat]);
 
   useEffect(() => {
     const onSub = onSnapshot(doc(db, 'chats', chatId), (res) => {
@@ -104,6 +105,13 @@ const Chat = () => {
       setText('');
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
+  };
+
   return (
     <div className='flex flex-col flex-[2] border-l border-r border-bordergray h-full'>
       <div className='top p-5 flex items-center justify-between border-b border-bordergray'>
@@ -134,20 +142,32 @@ const Chat = () => {
           />
         </div>
       </div>
-      <div className='center bg-[#0A0E0F] p-5 flex-1 overflow-scroll no-scrollbar flex flex-col gap-5 [&>.message]:max-w-[80%]'>
+      <div className='center bg-[#0A0E0F] p-5 flex-1 overflow-scroll no-scrollbar flex flex-col gap-2 [&>.message]:max-w-[80%]'>
         {chat?.messages?.map((message) => (
           <div
             className={
               message.senderId === currentUser?.id ? 'message own' : 'message'
             }
-            key={message?.createAt}
+            key={message?.createdAt}
           >
-            <div className='msgContainer'>
+            <div className='msgContainer flex flex-col'>
               <div className='texts'>
                 {message.img && <img src={message.img} alt='' />}
                 <p>{message.text}</p>
               </div>
-              {/* <span>{message.createdAt}</span> */}
+              <span className='text-xs text-lightgray'>
+                {new Date(message.createdAt.seconds * 1000).toLocaleString(
+                  'en-US',
+                  {
+                    weekday: 'short',
+                    // year: 'numeric',
+                    // month: 'short',
+                    // day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )}
+              </span>
             </div>
           </div>
         ))}
@@ -188,6 +208,7 @@ const Chat = () => {
               : 'Type a message...'
           }
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
           value={text}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
@@ -205,7 +226,6 @@ const Chat = () => {
         <button
           className='bg-[#48A6C3] text-darkgray px-5 py-2 rounded-2xl disabled:bg-red-600 disabled:cursor-not-allowed'
           onClick={handleSend}
-          on
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         >
           Send

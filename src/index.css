@@ -44,25 +44,28 @@ body {
     &.own {
       @apply self-end;
       .texts {
-        p {
-          @apply bg-[#48A6C3] text-[#0A0E0F] rounded-tr-none rounded-tl-2xl;
+        img {
+          @apply rounded-bl-2xl rounded-br-none;
         }
+        p {
+          @apply bg-[#48A6C3] text-[#0A0E0F] rounded-tr-none rounded-tl-2xl self-end;
+        }
+      }
+      span {
+        @apply self-end;
       }
     }
     img {
       @apply w-8 h-8 rounded-full object-cover;
     }
     .texts {
-      @apply flex flex-1 flex-col gap-1;
+      @apply flex flex-1 flex-col;
       img {
-        @apply w-full h-80 rounded-lg object-cover;
+        @apply w-full h-80 rounded-2xl rounded-bl-none object-cover;
       }
       p {
-        @apply px-5 py-2 bg-[#252B2E] rounded-2xl rounded-tl-none text-gray-400;
+        @apply max-w-fit px-5 py-2 bg-bordergray rounded-2xl rounded-tl-none text-white;
       }
-    }
-    span {
-      @apply text-sm;
     }
   }
 }
