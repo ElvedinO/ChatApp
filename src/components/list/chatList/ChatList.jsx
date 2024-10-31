@@ -98,7 +98,7 @@ const ChatList = () => {
           className='item flex items-center gap-5 p-5 cursor-pointer border-b border-bordergray'
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
-          style={{ backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe' }}
+          style={{ backgroundColor: chat?.isSeen ? 'transparent' : '#48A6C3' }}
         >
           <img
             className='w-12 h-12 rounded-full object-cover'

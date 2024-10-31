@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import {
   createUserWithEmailAndPassword,
@@ -10,8 +10,10 @@ import upload from '../../lib/upload';
 
 const Login = () => {
   const [avatar, setavatar] = useState({ file: null, url: '' });
-
   const [loading, setLoading] = useState(false);
+
+  const registerFormRef = useRef(null);
+  const loginFormRef = useRef(null);
 
   const handleAvatar = (e) => {
     if (e.target.files[0]) {
@@ -46,7 +48,10 @@ const Login = () => {
         chats: [],
       });
 
-      toast.success('Accout created. You can login now.');
+      toast.success('Account created. You can login now.');
+
+      registerFormRef.current.reset();
+      setavatar({ file: null, url: '' });
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -64,7 +69,7 @@ const Login = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast.success('You logged in successfuly');
+      toast.success('You logged in successfully');
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -77,7 +82,7 @@ const Login = () => {
     <div className='login w-full h-full flex items-center gap-24 justify-center '>
       <div className='item border-l border-r border-lightgray rounded-2xl p-12  max-w-fit'>
         <h2 className='text-xl font-bold'>Welcome</h2>
-        <form onSubmit={handleLogin}>
+        <form ref={loginFormRef} onSubmit={handleLogin}>
           <input
             className=' placeholder-lightgray outline-none'
             type='text'
@@ -92,7 +97,7 @@ const Login = () => {
           />
           <button
             disabled={loading}
-            className='max-w-fit px-5 py-2 bg-blueish  rounded-2xl font-bold'
+            className='text-darkgray max-w-fit px-5 py-2 bg-blueish  rounded-2xl font-bold'
           >
             {loading ? 'Loading...' : 'Sign In'}
           </button>
@@ -101,7 +106,7 @@ const Login = () => {
       <div className='seperator h-4/5 w-[2px] bg-bordergray'></div>
       <div className='item p-12 max-w-fit border-l border-r border-lightgray rounded-2xl'>
         <h2 className='text-xl font-bold'>Create an Account</h2>
-        <form onSubmit={handleRegister} action=''>
+        <form ref={registerFormRef} onSubmit={handleRegister} action=''>
           <label
             className='flex items-center gap-5 cursor-pointer underline'
             htmlFor='file'
@@ -140,7 +145,7 @@ const Login = () => {
           />
           <button
             disabled={loading}
-            className=' max-w-fit px-5 py-2 bg-blueish  rounded-2xl font-bold'
+            className='text-darkgray max-w-fit px-5 py-2 bg-blueish  rounded-2xl font-bold'
           >
             {loading ? 'Loading...' : 'Sign Up'}
           </button>

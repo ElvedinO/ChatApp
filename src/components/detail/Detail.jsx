@@ -142,7 +142,7 @@ const Detail = () => {
             : 'Block User'}
         </button>
         <button
-          className='p-2 bg-[#48A6C3] rounded-2xl cursor-pointer hover:bg-[#32778b] transition-all duration-300'
+          className='text-darkgray p-2 bg-[#48A6C3] rounded-2xl cursor-pointer hover:bg-[#32778b] transition-all duration-300'
           onClick={handleLogout}
         >
           Log Out
