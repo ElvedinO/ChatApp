@@ -17,6 +17,7 @@ const Chat = () => {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
   const [img, setImg] = useState({ file: null, url: '' });
+  const [uploadProgress, setUploadProgress] = useState(0); // New state for upload progress
 
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
@@ -53,13 +54,13 @@ const Chat = () => {
   };
 
   const handleSend = async () => {
-    if (text === '') return;
+    if (text === '' && !img.file) return;
 
     let imgUrl = null;
 
     try {
       if (img.file) {
-        imgUrl = await upload(img.file);
+        imgUrl = await upload(img.file, setUploadProgress);
       }
 
       await updateDoc(doc(db, 'chats', chatId), {
@@ -84,7 +85,7 @@ const Chat = () => {
             (c) => c.chatId === chatId
           );
 
-          userChatsData.chats[chatIndex].lastMessage = text;
+          userChatsData.chats[chatIndex].lastMessage = text || 'Image';
           userChatsData.chats[chatIndex].isSeen =
             id === currentUser.id ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();
@@ -103,6 +104,7 @@ const Chat = () => {
       });
 
       setText('');
+      setUploadProgress(0);
     }
   };
 
@@ -153,16 +155,13 @@ const Chat = () => {
             <div className='msgContainer flex flex-col'>
               <div className='texts'>
                 {message.img && <img src={message.img} alt='' />}
-                <p>{message.text}</p>
+                {message.text && <p>{message.text}</p>}
               </div>
               <span className='text-xs text-lightgray'>
                 {new Date(message.createdAt.seconds * 1000).toLocaleString(
                   'en-US',
                   {
                     weekday: 'short',
-                    // year: 'numeric',
-                    // month: 'short',
-                    // day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit',
                   }
@@ -173,8 +172,13 @@ const Chat = () => {
         ))}
         {img.url && (
           <div className='message own'>
-            <div className='texts'>
+            <div className='texts relative'>
               <img src={img.url} alt='' />
+              <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 '>
+                <span className='text-white absolute top-2/4'>
+                  {uploadProgress}%
+                </span>
+              </div>
             </div>
           </div>
         )}
