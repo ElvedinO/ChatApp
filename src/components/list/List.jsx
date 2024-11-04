@@ -10,7 +10,7 @@ const List = () => {
   };
 
   return (
-    <div className='flex flex-col '>
+    <div className='flex flex-col border-r border-bordergray'>
       <Userinfo toggleVisibility={toggleVisibility} isVisible={isVisible} />
       {isVisible && <ChatList />}
     </div>

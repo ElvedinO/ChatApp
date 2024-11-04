@@ -76,7 +76,7 @@ const Detail = () => {
   };
 
   return (
-    <div className='flex-[1] overflow-scroll no-scrollbar'>
+    <div className='flex-[1] overflow-scroll no-scrollbar border-l border-bordergray'>
       <div className='user py-7 px-5 flex flex-col items-center gap-4 border-b border-bordergray text-center'>
         <img
           className='w-24 h-24 object-cover rounded-full'
