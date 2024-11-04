@@ -26,7 +26,7 @@ function App() {
   if (isLoading) return <div className='loading'>Loading...</div>;
 
   return (
-    <div className='container text-white w-full h-full lg:w-[80vw] lg:h-[90vh] bg-midnight rounded-3xl flex flex-col lg:flex-row'>
+    <div className='container text-white w-full h-full lg:w-[80vw] lg:h-[90vh] bg-midnight md:rounded-3xl flex flex-col lg:flex-row'>
       {currentUser ? (
         <>
           <List />

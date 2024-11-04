@@ -183,7 +183,7 @@ const Chat = () => {
           <div ref={endRef}></div>
         </div>
         <div
-          className='bottom p-5 flex items-center justify-between gap-5
+          className='bottom p-2 md:p-5 flex items-center justify-between gap-1 md:gap-5
        border-t border-bordergray mt-auto'
         >
           <div className='icons flex gap-5'>
@@ -214,7 +214,7 @@ const Chat = () => {
             value={text}
             disabled={isCurrentUserBlocked || isReceiverBlocked}
           />
-          <div className='emoji relative'>
+          <div className='emoji relative hidden md:block'>
             <img
               className='w-5 h-5 cursor-pointer'
               src='../images/emoji.png'
@@ -225,6 +225,7 @@ const Chat = () => {
               <EmojiPicker open={open} onEmojiClick={handleEmoji} />
             </div>
           </div>
+
           <button
             className='bg-[#48A6C3] text-darkgray px-5 py-2 rounded-2xl disabled:bg-red-600 disabled:cursor-not-allowed'
             onClick={handleSend}
